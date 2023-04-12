@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body>
+    <div id="dplayer"></div>
+    <script src="./js/DPlayer.min.js"></script>
+    <script>
+        const dp = new DPlayer({
+            container: document.getElementById('dplayer'),
+            loop: true,
+            autoplay: true,
+            video: {
+                url: './resource/Lycoris.mp4',
+            },
+            danmaku: {
+                id: '9E2E3368B56CDBB4',
+                api: 'https://api.prprpr.me/dplayer/',
+                //token: 'tokendemo',
+                maximum: 1000,
+                addition: ['https://api.prprpr.me/dplayer/v3/bilibili?aid=4157142'],
+                user: 'DIYgod',
+                bottom: '15%',
+                unlimited: true,
+                speedRate: 0.5,
+            },
+        });
+        setTimeout(function () {
+            console.log("5second")
+            dp.danmaku.draw({
+                text: 'Get a danmaku via WebSocket',
+                color: '#fff',
+                type: 'right',
+            })
+        },5000)
+    </script>
+</body>
+
+</html>
