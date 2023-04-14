@@ -13,15 +13,14 @@
             container: document.getElementById('dplayer'),
             loop: true,
             autoplay: true,
+            live: true,
             video: {
                 url: './resource/Lycoris.mp4',
             },
             danmaku: {
-                id: '9E2E3368B56CDBB4',
-                api: 'https://api.prprpr.me/dplayer/',
                 //token: 'tokendemo',
                 maximum: 1000,
-                addition: ['https://api.prprpr.me/dplayer/v3/bilibili?aid=4157142'],
+                //addition: ['https://api.prprpr.me/dplayer/v3/bilibili?aid=4157142'],
                 user: 'DIYgod',
                 bottom: '15%',
                 unlimited: true,
@@ -35,7 +34,33 @@
                 color: '#fff',
                 type: 'right',
             })
-        },5000)
+        }, 5000)
+        // dp.on('danmaku_send', function (send) {
+        //     console.log(send);
+        // });
+        // 浏览器提供 WebSocket 对象
+        const ws = new WebSocket('ws://localhost:3000');
+        console.log(ws)
+        dp.on("danmaku_send", function (message) {
+            console.log(JSON.stringify(message))
+            ws.send(JSON.stringify(message));
+        })
+        // 接收
+        ws.onmessage = function (mes) {
+            console.log(JSON.parse(mes.data))
+            let message = JSON.parse(mes.data);
+            dp.danmaku.draw({
+                text: message.text,
+                color: message.color,
+                type: message.type,
+            })
+            //console.log(mes.data);
+            //let data=JSON.parse(mes)
+            //console.log(data.text);
+            if (mes.data === 'hello') {
+                ws.close();
+            }
+        }
     </script>
 </body>
 
