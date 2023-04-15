@@ -3,19 +3,130 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        .head {
+            height: 65px;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            display: flex;
+            position: fixed;
+            z-index: 9999;
+        }
+
+        .body {
+            padding-top: 100px;
+            display: flex;
+            background-color: #006666;
+            flex-direction: column;
+        }
+
+        .bg {
+            width: 23%;
+        }
+
+        .top {
+            height: 15px;
+        }
+
+        .mid {
+            display: flex;
+            padding-bottom: 150px;
+        }
+
+        body {
+            background-color: #006666;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        .title {
+            opacity: 0.6;
+            font-family: "STSong";
+            position: relative;
+            font-size: 18px;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        div.title:hover {
+            background-color: rgb(211, 223, 234);
+        }
+
+        .bottom {
+            background-color: white;
+            height: 100px;
+            width: 100%;
+            padding-top: 30px;
+        }
+
+        .url {
+            padding-top: 50px;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="dplayer"></div>
+    <div class="main">
+        <div class="head">
+            <div style="width: 50%;">
+                <img src="./resource/logo.png">
+            </div>
+            <div style="display: flex;">
+                <div class="title">
+                    <p>我要直播</p>
+                </div>
+                <div class="title">
+                    <p>观看直播</p>
+                </div>
+                <div class="title">
+                    <p>@kuuhaku</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="body">
+            <div class="top"></div>
+            <div class="mid">
+                <div class=" bg"></div>
+                <div class="mid-mid"
+                    style="border-radius:5px;padding: 50px 50px 50px 50px;background-color:rgba(255,255,255,0.75);width: 120%;">
+                    <div id="dplayer"></div>
+                    <div class="url">
+                        <div style="text-align: center;"><span
+                                style="opacity: 0.6;font-family: 'STSong';">直播url</span><input type="url"
+                                style="width: 70%;height: 25px;border: 1px solid;margin-left: 20px;" id="url"><button
+                                id="bofang" style="height: 31px;margin-left: 50px;"
+                                onclick="ButtonOnClick()">播放</button></div>
+                    </div>
+                </div>
+                <div class="bg"></div>
+            </div>
+            <div class="bottom">
+                <p style="padding-left: 200px;opacity: 0.6;font-family: 'STSong';font-size: 15px;">@kuuhaku
+                    1465598548@qq.com</p>
+                <p style="padding-left: 200px;opacity: 0.6;font-family: 'STSong';font-size: 15px;">
+                    本站全部内容系大学生毕业设计，这部分是写着玩的，显得更像个网站，没有版权限制</p>
+            </div>
+        </div>
+
+    </div>
+
     <script src="./js/DPlayer.min.js"></script>
-    <script>
+    <script src="./js/flv.min.js"></script>
+    <script>//播放器配置
         const dp = new DPlayer({
             container: document.getElementById('dplayer'),
             loop: true,
             autoplay: true,
             live: true,
             video: {
-                url: './resource/Lycoris.mp4',
+                //url: './resource/Lycoris.mp4',
+                url:"http://45.77.253.113:8080/live/nihao.flv",
+                type: 'flv',
+                autoplay: true
             },
             apiBackend: {
                 read: function (options) {
@@ -73,6 +184,15 @@
             }
         }
     </script>
+    <script>//按钮
+        function ButtonOnClick() {
+            let url = document.getElementById("url").value;
+            console.log(url);
+            console.log(dp.video.src);
+            dp.video.src = url;
+        }
+    </script>
+
 </body>
 
 </html>
