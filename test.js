@@ -1,13 +1,8 @@
-var clients = [0,2,3,5,6,67,3,2,0]
-console.log(clients.length)
-for(let i = 0 ; i < clients.length ; i++){
-    if(clients[i]==0){
-        for(let f = i+1 ; f < clients.length ; f ++){
-            clients[f-1]=clients[f];
-        }
-        clients.pop();
-        i--;
-        console.log(clients.length)
-    }
-}
-console.log("test")
+import { createRoot } from 'react-dom/client';
+
+// 清除现有的 HTML 内容
+document.body.innerHTML = '<div id="app"></div>';
+
+// 渲染你的 React 组件
+const root = createRoot(document.getElementById('app'));
+root.render(<h1>Hello, world</h1>);

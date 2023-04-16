@@ -16,7 +16,7 @@
         }
 
         .body {
-            padding-top: 100px;
+            /* padding-top: 100px; */
             display: flex;
             background-color: #006666;
             flex-direction: column;
@@ -27,12 +27,14 @@
         }
 
         .top {
-            height: 15px;
+            height: 0px;
         }
 
         .mid {
+            padding-top: 100px;
             display: flex;
             padding-bottom: 150px;
+            background-image: url("./resource/wallhaven-9mjoy1.png");
         }
 
         body {
@@ -82,7 +84,7 @@
                     <p>观看直播</p>
                 </div>
                 <div class="title">
-                    <p>@kuuhaku</p>
+                    <p onclick="top_button3onclick()">@kuuhaku</p>
                 </div>
             </div>
 
@@ -124,7 +126,7 @@
             live: true,
             video: {
                 //url: './resource/Lycoris.mp4',
-                url:"http://45.77.253.113:8080/live/nihao.flv",
+                url: "http://45.77.253.113:8080/live/nihao.flv",
                 type: 'flv',
                 autoplay: true
             },
@@ -185,12 +187,19 @@
         }
     </script>
     <script>//按钮
+        function top_button3onclick(){ 
+            //window.scrollTo(0, document.documentElement.scrollHeight)
+            let target = document.querySelector(".bottom")
+            console.log(target)
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
         function ButtonOnClick() {
             let url = document.getElementById("url").value;
             console.log(url);
             console.log(dp.video.src);
             dp.video.src = url;
         }
+
     </script>
 
 </body>
