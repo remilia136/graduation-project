@@ -121,56 +121,27 @@
     <script src="./js/flv.min.js"></script>
     <script type='text/babel'>//播放器配置
     page2();
-    let dp_out
-    function ButtonOnClick() {
-            let url = document.getElementById("url").value;
-            dp_out.video.src = url;
-            console.log(url);
-            console.log(dp_out.video)
-            console.log(dp_out.video.src);
-            //dp_out.video.src = url;
-        }
+    //import React, { useState } from 'react';
     function page2(){
-        
-        let mid_mid = document.getElementById("mid-mid")
-        mid_mid.innerHTML='<div id="dplayer"></div><div class="url">\
-                        <div style="text-align: center;"><span\
-                                style="opacity: 0.6;font-family: ``STSong``;">直播url</span><input type="url"\
-                                style="width: 70%;height: 25px;border: 1px solid;margin-left: 20px;" id="url"><button\
-                                id="bofang" style="height: 31px;margin-left: 50px;"\
-                                onclick="ButtonOnClick()">播放</button></div>\
-                    </div>'
-        // let dplayer = document.createElement("div")
-        // dplayer.setAttribute("id","dplayer")
-        // mid_mid.appendChild(dplayer)
-        // let url = document.createElement("div")
-        // url.setAttribute("class","url")
-        // url.setAttribute("style","text-align: 'center';")
-        // let span = document.createElement("span")
-        // span.setAttribute("style","opacity: 0.6;font-family: 'STSong';")
-        // span.innerText=("button")
-        // let input = document.createElement("input")
-        // let button = document.createElement("button")
-        // url.appendChild(span)
+        ReactDOM.render(<App2 />, document.getElementById('mid-mid'));
+        function App2() {
+            //const [count, setCount] = useState("nihao");
+            function ButtonOnClick2(){
 
-
-        //mid_mid.appendChild(url)
-        
-        // function App2() {
-        //     //const [count, setCount] = useState("nihao");
-        //     return (
-        //         <div>
-        //             <div id="dplayer"></div>
-        //             <div class="url">
-        //                 <div style={{textAlign: 'center'}}>
-        //                     <span style={{opacity: 0.6,fontFamily: 'STSong'}}>直播url</span>
-        //                     <input type="url" style={{width: '70%',height: '25px',border: '1px solid',marginLeft: '20px'}} id="url"></input>
-        //                     <button id="bofang" style={{height: '31px',marginLeft: '50px'}} onClick={ButtonOnClick}>播放</button>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     );
-        // }
+            }
+            return (
+                <div>
+                    <div id="dplayer"></div>
+                    <div class="url">
+                        <div style={{textAlign: 'center'}}>
+                            <span style={{opacity: 0.6,fontFamily: 'STSong'}}>直播url</span>
+                            <input type="url" style={{width: '70%',height: '25px',border: '1px solid',marginLeft: '20px'}} id="url"></input>
+                            <button id="bofang" style={{height: '31px',marginLeft: '50px'}} onClick={ButtonOnClick}>播放</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
         
         const dp = new DPlayer({
             container: document.getElementById('dplayer'),
@@ -178,9 +149,8 @@
             autoplay: true,
             live: true,
             video: {
-                url:"./resource/Lycoris.mp4",
                 //url: 'file:\\\C:\Users\Remilia136\Desktop\graduation-project\resource\Lycoris.mp4',
-                //url: "http://45.77.253.113:8080/live/nihao.flv",
+                url: "http://45.77.253.113:8080/live/nihao.flv",
                 type: 'flv',
                 autoplay: true
             },
@@ -239,8 +209,12 @@
                 ws.close();
             }
         }
-        dp_out=dp;
-        
+        function ButtonOnClick() {
+            let url = document.getElementById("url").value;
+            console.log(url);
+            console.log(dp.video.src);
+            //dp.video.src = url;
+        }
     }
     function page1(){
         ReactDOM.render(<App1 />, document.getElementById('mid-mid'));
@@ -264,7 +238,6 @@
     </script>
     
     <script>//按钮
-    
         function top_button3onclick() {
             //window.scrollTo(0, document.documentElement.scrollHeight)
             let target = document.querySelector(".bottom")
