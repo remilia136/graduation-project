@@ -49,8 +49,8 @@
             font-family: "STSong";
             position: relative;
             font-size: 18px;
-            padding-right: 15px;
-            padding-left: 15px;
+            width: 105px;
+            text-align: center;
         }
 
         div.title:hover {
@@ -89,7 +89,10 @@
                 <div class="title" onclick="page2()">
                     <p>观看直播</p>
                 </div>
-                <div class="title"  onclick="top_button3onclick()">
+                <div class="title"  onclick="page3()">
+                    <p>关于</p>
+                </div>
+                <div class="title"  onclick="top_button4onclick()">
                     <p>@kuuhaku</p>
                 </div>
             </div>
@@ -120,18 +123,28 @@
     <script src="./js/DPlayer.min.js"></script>
     <script src="./js/flv.min.js"></script>
     <script type='text/babel'>//播放器配置
+    //const ws = new WebSocket('ws://45.77.255.151:3000');
+    const ws = new WebSocket('ws://localhost:3000');
+    console.log(ws)
     page2();
     let dp_out
     function ButtonOnClick() {
+        console.log(url);
+            
             let url = document.getElementById("url").value;
-            dp_out.video.src = url;
-            console.log(url);
-            console.log(dp_out.video)
-            console.log(dp_out.video.src);
+            page2(url)
+            ws.send(
+                JSON.stringify({
+                type:"url",
+                message:url
+            }))
+            //dp_out.video.src = url;
+            //console.log(dp_out.video)
+            //console.log(dp_out.video.src);
             //dp_out.video.src = url;
         }
-    function page2(){
-        
+
+    function page2(url){
         let mid_mid = document.getElementById("mid-mid")
         mid_mid.innerHTML='<div id="dplayer"></div><div class="url">\
                         <div style="text-align: center;"><span\
@@ -140,37 +153,22 @@
                                 id="bofang" style="height: 31px;margin-left: 50px;"\
                                 onclick="ButtonOnClick()">播放</button></div>\
                     </div>'
-        // let dplayer = document.createElement("div")
-        // dplayer.setAttribute("id","dplayer")
-        // mid_mid.appendChild(dplayer)
-        // let url = document.createElement("div")
-        // url.setAttribute("class","url")
-        // url.setAttribute("style","text-align: 'center';")
-        // let span = document.createElement("span")
-        // span.setAttribute("style","opacity: 0.6;font-family: 'STSong';")
-        // span.innerText=("button")
-        // let input = document.createElement("input")
-        // let button = document.createElement("button")
-        // url.appendChild(span)
-
-
-        //mid_mid.appendChild(url)
-        
-        // function App2() {
-        //     //const [count, setCount] = useState("nihao");
-        //     return (
-        //         <div>
-        //             <div id="dplayer"></div>
-        //             <div class="url">
-        //                 <div style={{textAlign: 'center'}}>
-        //                     <span style={{opacity: 0.6,fontFamily: 'STSong'}}>直播url</span>
-        //                     <input type="url" style={{width: '70%',height: '25px',border: '1px solid',marginLeft: '20px'}} id="url"></input>
-        //                     <button id="bofang" style={{height: '31px',marginLeft: '50px'}} onClick={ButtonOnClick}>播放</button>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     );
-        // }
+    /*  
+        ReactDOM.render(<App2 />, document.getElementById('mid-mid'));
+        function App2() {
+             return (
+                 <div>
+                     <div id="dplayer"></div>
+                     <div class="url">
+                         <div style={{textAlign: 'center'}}>
+                             <span style={{opacity: 0.6,fontFamily: 'STSong'}}>直播url</span>
+                             <input type="url" style={{width: '70%',height: '25px',border: '1px solid',marginLeft: '20px'}} id="url"></input>
+                             <button id="bofang" style={{height: '31px',marginLeft: '50px'}} onClick={ButtonOnClick}>播放</button>
+                         </div>
+                     </div>
+                 </div>
+             );
+         }*/
         
         const dp = new DPlayer({
             container: document.getElementById('dplayer'),
@@ -178,9 +176,11 @@
             autoplay: true,
             live: true,
             video: {
-                url:"./resource/Lycoris.mp4",
+                //url:"./resource/Lycoris.mp4",
                 //url: 'file:\\\C:\Users\Remilia136\Desktop\graduation-project\resource\Lycoris.mp4',
                 //url: "http://45.77.253.113:8080/live/nihao.flv",
+                //url:"http://45.77.255.151/resource/Lycoris.mp4",
+                url:url,
                 type: 'flv',
                 autoplay: true
             },
@@ -195,9 +195,7 @@
                 },
             },
             danmaku: {
-                //token: 'tokendemo',
                 maximum: 1000,
-                //addition: ['https://api.prprpr.me/dplayer/v3/bilibili?aid=4157142'],
                 user: 'DIYgod',
                 bottom: '15%',
                 unlimited: true,
@@ -208,20 +206,22 @@
         setTimeout(function () {
             console.log("5second")
             dp.danmaku.draw({
-                text: 'Get a danmaku via WebSocket',
+                text: 'danmaku test',
                 color: '#fff',
                 type: 'right',
             })
         }, 5000)
-        // dp.on('danmaku_send', function (send) {
-        //     console.log(send);
-        // });
-        // 浏览器提供 WebSocket 对象
-        const ws = new WebSocket('ws://45.77.255.151:3000');
-        console.log(ws)
+        
         dp.on("danmaku_send", function (message) {
+           // message.url=dp_out.video.src;
             console.log(JSON.stringify(message))
-            ws.send(JSON.stringify(message));
+            let mess = {
+                type:"danmaku",
+                message:message,
+                url:url
+            }
+            console.log(mess)
+            ws.send(JSON.stringify(mess));
         })
         // 接收
         ws.onmessage = function (mes) {
@@ -232,9 +232,6 @@
                 color: message.color,
                 type: message.type,
             })
-            //console.log(mes.data);
-            //let data=JSON.parse(mes)
-            //console.log(data.text);
             if (mes.data === 'hello') {
                 ws.close();
             }
@@ -250,7 +247,7 @@
                    <h1>直播方法如下</h1>
                    <h2>1.下载obs</h2>
                    <p>地址如下</p>
-                   <code>http://obs.douyinapp.net/?bd_vid=8760393272029737077</code>
+                   <a href="http://obs.douyinapp.net/?bd_vid=8760393272029737077">http://obs.douyinapp.net/?bd_vid=8760393272029737077</a>
                    <h2>2.打开obs,打开右下角设置</h2>
                    <img src="./resource/1.png" style={{height:108*5,width:192*5}}></img>
                    <h2>3.左边选择直播,输入直播服务器地址和推流码</h2>
@@ -261,12 +258,26 @@
             );
         }
     }
+    function page3(){
+        ReactDOM.render(<App3 />, document.getElementById('mid-mid'));
+        function App3(){
+            return (
+                <div>
+                    <p>这是普通大学生的毕业设计</p>
+                    <p>可以正常的播放直播流，而且可以收发弹幕，弹幕分房简单粗暴，按照用户提供的视频流的url进行分房（尚未实装，目前是可以看到所有用户的弹幕），弹幕是实时弹幕</p>
+                    <p>除了直播之外，输入其他类型的url也可能能播放，如.mp4</p>
+                    <p></p>
+                    <p>没啥话说了，凑点字数</p>
+                    <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+                </div>
+            );
+        }
+    }
     </script>
     
     <script>//按钮
     
-        function top_button3onclick() {
-            //window.scrollTo(0, document.documentElement.scrollHeight)
+        function top_button4onclick() {
             let target = document.querySelector(".bottom")
             console.log(target)
             target.scrollIntoView({ behavior: 'smooth' });
@@ -274,17 +285,6 @@
         
 
     </script>
-    <!-- <script type='text/babel'>
-        ReactDOM.render(<App />, document.getElementById('mid-mid'));
-        function App() {
-            return (
-                <div id="dplayer"></div>
-            );
-        }
-
-    </script> -->
-    
-
 </body>
 
 </html>
