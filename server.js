@@ -1,35 +1,69 @@
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'users'
+});
+connection.connect();
+
 var express = require('express');
 var app = express();
-
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use('/resource', express.static('resource'));
+app.use('/js', express.static('js'))
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + "/index.html");
+  res.sendFile(__dirname + "/login.html");
+})
+app.post('/index.html', function (req, res) {
+console.log(req.body)
+  connection.query('SELECT * from users where username="' + req.body.username + '"and password="' + req.body.password + '"', function (error, results, fields) {
+    if (error) throw error;
+    if (!results[0]) {
+      console.log("undefined")
+    } else {
+      res.sendFile(__dirname + "/index.html");
+    }
+  });
+  
+})
+app.post('/', function (req, res) {
+  console.log(req.body)
+  if (req.body.type == 'login') {
+    connection.query('SELECT * from users where username="' + req.body.username + '"and password="' + req.body.password + '"', function (error, results, fields) {
+      if (error) throw error;
+      if (!results[0]) {
+        console.log("undefined")
+        res.send('1');
+      } else {
+        //console.log('The solution is: ', results[0].username);
+        res.send('0')
+      }
+    });
+
+  }
+  if (req.body.type == 'signup') {
+    connection.query('SELECT * from users where username="' + req.body.username + '"', function (error, results, fields) {
+      if (error) throw error;
+      if (req.body.yqm == 'Remilia') {
+        if (!results[0]) {
+          connection.query('insert into users values("' + req.body.username + '","' + req.body.password + '")')
+          res.send('0');
+        } else {
+          res.send('1');
+        }
+      } else {
+        res.send("2")
+      }
+
+    });
+  }
+
 })
 
-app.get('/js/DPlayer.min.js', function (req, res) {
-  res.sendFile(__dirname + '/js/DPlayer.min.js');
-})//http://localhost:8081/js/DPlayer.min.js
 
-app.get('/resource/Lycoris.mp4', function (req, res) {
-  res.sendFile(__dirname + "/resource/Lycoris.mp4");
-})//http://localhost:8081/resource/Lycoris.mp4
-app.get('/v3', function (req, res) {
-  res.send();
-})
-app.post('/v3', function (req, res) {
-
-  // 输出 JSON 格式
-  console.log(req);
-  var response = {
-    "text": 'Get a danmaku via WebSocket',
-    "color": '#fff',
-    "type": 'right',
-  };
-  res.send(response);
-  console.log(response);
-  //res.end(JSON.stringify(response));
-})
-
-var server = app.listen(8081, function () {
+var server = app.listen(8080, function () {
 
   var host = server.address().address
   var port = server.address().port
